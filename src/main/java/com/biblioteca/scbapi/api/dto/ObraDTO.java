@@ -1,24 +1,24 @@
 package com.biblioteca.scbapi.api.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.biblioteca.scbapi.model.entity.Obra;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Obra {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ObraDTO {
     private long id;
     private String titulo;
     private int numExemplares;
     private float valorMultaPorDiaDeAtraso;
     private String categoria;
     private String editora;
+
+    public static ObraDTO create(Obra obra) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(obra, ObraDTO.class);
+    }
 }
