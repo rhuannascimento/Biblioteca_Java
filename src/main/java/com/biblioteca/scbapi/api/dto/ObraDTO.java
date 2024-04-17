@@ -10,7 +10,7 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ObraDTO {
-    private long id;
+    private Long id;
     private String titulo;
     private int numExemplares;
     private float valorMultaPorDiaDeAtraso;

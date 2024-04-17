@@ -10,7 +10,7 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TomadorDTO {
-    private long id;
+    private Long id;
     private String nome;
     private String cpf;
     private String email;

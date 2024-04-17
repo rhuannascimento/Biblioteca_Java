@@ -11,7 +11,7 @@ import org.modelmapper.ModelMapper;
 @AllArgsConstructor
 public class RevistaDTO{
 
-    private long id;
+    private Long id;
     private String edicao;
     private int idObra;
 

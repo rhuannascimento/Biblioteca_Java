@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Exemplar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String prateleira;
     private boolean emprestado;
 

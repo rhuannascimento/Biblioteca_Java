@@ -10,9 +10,9 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LivroDTO {
-    private long id;
+    private Long id;
     private String autor;
-    private long idObra;
+    private Long idObra;
 
     public static LivroDTO create(Livro livro) {
         ModelMapper modelMapper = new ModelMapper();

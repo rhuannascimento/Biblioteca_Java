@@ -12,9 +12,9 @@ import org.modelmapper.ModelMapper;
 @AllArgsConstructor
 public class ReservaDTO {
 
-    private long id;
-    private long idTomador;
-    private long idObra;
+    private Long id;
+    private Long idTomador;
+    private Long idObra;
 
     public static ReservaDTO create(Reserva reserva) {
         ModelMapper modelMapper = new ModelMapper();

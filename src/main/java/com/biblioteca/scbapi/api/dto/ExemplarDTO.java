@@ -10,10 +10,10 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExemplarDTO {
-    private long id;
+    private Long id;
     private String prateleira;
     private boolean emprestado;
-    private long idObra;
+    private Long idObra;
 
     public static ExemplarDTO create(Exemplar exemplar) {
         ModelMapper modelMapper = new ModelMapper();

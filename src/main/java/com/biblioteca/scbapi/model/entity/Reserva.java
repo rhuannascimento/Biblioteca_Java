@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     private Tomador tomador;

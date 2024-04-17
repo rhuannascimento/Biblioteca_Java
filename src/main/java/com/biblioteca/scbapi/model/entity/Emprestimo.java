@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -14,7 +15,7 @@ import java.util.Date;
 public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private Date dataDeEmprestimo;
     private Date dataDeDevolucao;
     private Date dataPrevistaDeDevolucao;
