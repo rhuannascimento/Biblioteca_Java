@@ -20,6 +20,6 @@ public class FuncionarioDTO{
 
     public static FuncionarioDTO create(Funcionario funcionario) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(funcionario, Funcionario.class);
+        return modelMapper.map(funcionario, FuncionarioDTO.class);
     }
 }

@@ -13,7 +13,7 @@ public class RevistaDTO{
 
     private Long id;
     private String edicao;
-    private int idObra;
+    private Long idObra;
 
     public static RevistaDTO create(Revista revista) {
         ModelMapper modelMapper = new ModelMapper();
