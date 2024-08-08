@@ -44,16 +44,16 @@ public class FuncionarioService {
         if (funcionario.getMatricula() == null || funcionario.getMatricula().length() != 8 || funcionario.getMatricula().contains(" ")) {
             throw new RegraNegocioException("Matrícula inválida");
         }
-        if (funcionario.getNome() == null || funcionario.getNome().trim().equals("")) {
+        if (funcionario.getNome() == null || funcionario.getNome().isEmpty()) {
             throw new RegraNegocioException("Nome inválido");
         }
-        if (funcionario.getCpf() == null || funcionario.getCpf().trim().equals("")) {
+        if (funcionario.getCpf() == null || funcionario.getCpf().isEmpty() || funcionario.getCpf().contains(" ") || funcionario.getCpf().length() != 11 ) {
             throw new RegraNegocioException("CPF inválido");
         }
-        if (funcionario.getEmail() == null || funcionario.getEmail().trim().equals("")) {
+        if (funcionario.getEmail() == null || funcionario.getEmail().isEmpty()) {
             throw new RegraNegocioException("Email inválido");
         }
-        if (funcionario.getTelefone() == null || funcionario.getTelefone().trim().equals("")) {
+        if (funcionario.getTelefone() == null || funcionario.getTelefone().isEmpty()) {
             throw new RegraNegocioException("Telefone inválido");
         }
     }
