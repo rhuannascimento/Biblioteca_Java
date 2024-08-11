@@ -23,8 +23,8 @@ public class TomadorController {
 
     @GetMapping()
     public ResponseEntity get() {
-        List<Tomador> tomador = service.getTomadores();
-        return ResponseEntity.ok(tomador.stream().map(TomadorDTO::create).collect(Collectors.toList()));
+        List<Tomador> tomadores = service.getTomadores();
+        return ResponseEntity.ok(tomadores.stream().map(TomadorDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")

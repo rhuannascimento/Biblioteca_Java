@@ -22,8 +22,8 @@ public class FuncionarioController {
 
     @GetMapping()
     public ResponseEntity get() {
-        List<Funcionario> alunos = service.getFuncionarios();
-        return ResponseEntity.ok(alunos.stream().map(FuncionarioDTO::create).collect(Collectors.toList()));
+        List<Funcionario> funcionarios = service.getFuncionarios();
+        return ResponseEntity.ok(funcionarios.stream().map(FuncionarioDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
