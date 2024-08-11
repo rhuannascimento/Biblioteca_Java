@@ -2,8 +2,11 @@ package com.biblioteca.scbapi.api.controller;
 
 import com.biblioteca.scbapi.api.dto.LivroDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
+import com.biblioteca.scbapi.model.entity.Obra;
 import com.biblioteca.scbapi.service.LivroService;
 import com.biblioteca.scbapi.model.entity.Livro;
+import com.biblioteca.scbapi.service.ObraService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +16,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@RestController
+@RequestMapping("/api/v1/livro")
+@RequiredArgsConstructor
 public class LivroController {
     private final LivroService service;
-
+    private final ObraService obraService;
     @GetMapping()
     public ResponseEntity get() {
         List<Livro> livros= service.getLivros();
@@ -74,6 +80,15 @@ public class LivroController {
     public Livro converter(LivroDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Livro livro = modelMapper.map(dto, Livro.class);
+
+        if (dto.getIdObra() != null) {
+            Optional<Obra> obra = obraService.getObraById(dto.(dto.getIdObra()));
+            if (!obra.isPresent()) {
+                livro.setObra(null);
+            } else {
+                livro.setObra(obra.get());
+            }
+        }
 
         return livro;
     }

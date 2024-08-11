@@ -1,12 +1,13 @@
 package com.biblioteca.scbapi.api.controller;
 
 import com.biblioteca.scbapi.api.dto.ExemplarDTO;
-import com.biblioteca.scbapi.api.dto.TomadorDTO;
+
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.model.entity.Exemplar;
-import com.biblioteca.scbapi.model.entity.Tomador;
+import com.biblioteca.scbapi.model.entity.Obra;
 import com.biblioteca.scbapi.service.ExemplarService;
-import com.biblioteca.scbapi.service.TomadorService;
+import com.biblioteca.scbapi.service.ObraService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@RestController
+@RequestMapping("/api/v1/exemplar")
+@RequiredArgsConstructor
 public class ExemplarController {
     private final ExemplarService service;
-
+    private final ObraService obraService;
     @GetMapping()
     public ResponseEntity get() {
         List<Exemplar> exemplares = service.getExemplares();
@@ -77,6 +80,15 @@ public class ExemplarController {
     public Exemplar converter(ExemplarDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Exemplar exemplar = modelMapper.map(dto, Exemplar.class);
+
+        if (dto.getIdObra() != null) {
+            Optional<Obra> obra = obraService.getObraById(dto.getIdObra());
+            if (!obra.isPresent()) {
+                exemplar.setObra(null);
+            } else {
+                exemplar.setObra(obra.get());
+            }
+        }
 
         return exemplar;
     }

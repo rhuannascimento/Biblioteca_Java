@@ -4,7 +4,11 @@ package com.biblioteca.scbapi.api.controller;
 import com.biblioteca.scbapi.api.dto.EmprestimoDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.model.entity.Emprestimo;
+import com.biblioteca.scbapi.model.entity.Exemplar;
+import com.biblioteca.scbapi.model.entity.Tomador;
 import com.biblioteca.scbapi.service.EmprestimoService;
+import com.biblioteca.scbapi.service.ExemplarService;
+import com.biblioteca.scbapi.service.TomadorService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -20,7 +24,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EmprestimoController {
     private final EmprestimoService service;
-
+    private final TomadorService tomadorService;
+    private final ExemplarService exemplarService;
     @GetMapping()
     public ResponseEntity get() {
         List<Emprestimo> emprestimos = service.getEmprestimos();
@@ -79,6 +84,24 @@ public class EmprestimoController {
     public Emprestimo converter(EmprestimoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Emprestimo emprestimo = modelMapper.map(dto, Emprestimo.class);
+
+        if (dto.getIdTomador() != null) {
+            Optional<Tomador> tomador = tomadorService.getTomadorById(dto.getIdTomador());
+            if (!tomador.isPresent()) {
+                emprestimo.setTomador(null);
+            } else {
+                emprestimo.setTomador(tomador.get());
+            }
+        }
+
+        if (dto.getIdExemplar() != null) {
+            Optional<Exemplar> exemplar = exemplarService.getExemplarById(dto.getIdExemplar());
+            if (!exemplar.isPresent()) {
+                emprestimo.setExemplar(null);
+            } else {
+                emprestimo.setExemplar(exemplar.get());
+            }
+        }
 
         return emprestimo;
     }

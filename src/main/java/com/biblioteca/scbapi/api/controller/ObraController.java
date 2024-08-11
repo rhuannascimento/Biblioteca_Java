@@ -1,12 +1,11 @@
 package com.biblioteca.scbapi.api.controller;
 
-import com.biblioteca.scbapi.api.dto.LivroDTO;
+
 import com.biblioteca.scbapi.api.dto.ObraDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
-import com.biblioteca.scbapi.model.entity.Livro;
 import com.biblioteca.scbapi.model.entity.Obra;
-import com.biblioteca.scbapi.service.LivroService;
 import com.biblioteca.scbapi.service.ObraService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@RestController
+@RequestMapping("/api/v1/obra")
+@RequiredArgsConstructor
 public class ObraController {
     private final ObraService service;
 
     @GetMapping()
     public ResponseEntity get() {
-        List<Obra> obras= service.getObras();
+        List<Obra> obras = service.getObras();
         return ResponseEntity.ok(obras.stream().map(ObraDTO::create).collect(Collectors.toList()));
     }
 
