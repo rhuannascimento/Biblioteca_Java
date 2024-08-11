@@ -82,7 +82,7 @@ public class LivroController {
         Livro livro = modelMapper.map(dto, Livro.class);
 
         if (dto.getIdObra() != null) {
-            Optional<Obra> obra = obraService.getObraById(dto.(dto.getIdObra()));
+            Optional<Obra> obra = obraService.getObraById(dto.getIdObra());
             if (!obra.isPresent()) {
                 livro.setObra(null);
             } else {

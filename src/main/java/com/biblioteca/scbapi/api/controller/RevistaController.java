@@ -1,12 +1,12 @@
 package com.biblioteca.scbapi.api.controller;
 
 import com.biblioteca.scbapi.api.dto.RevistaDTO;
-import com.biblioteca.scbapi.api.dto.TomadorDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
+import com.biblioteca.scbapi.model.entity.Obra;
 import com.biblioteca.scbapi.model.entity.Revista;
-import com.biblioteca.scbapi.model.entity.Tomador;
+import com.biblioteca.scbapi.service.ObraService;
 import com.biblioteca.scbapi.service.RevistaService;
-import com.biblioteca.scbapi.service.TomadorService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@RestController
+@RequestMapping("/api/v1/revista")
+@RequiredArgsConstructor
 public class RevistaController {
     private final RevistaService service;
-
+    private final ObraService obraService;
     @GetMapping()
     public ResponseEntity get() {
         List<Revista> revistas = service.getRevistas();
@@ -77,6 +79,15 @@ public class RevistaController {
     public Revista converter(RevistaDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Revista revista = modelMapper.map(dto, Revista.class);
+
+        if (dto.getIdObra() != null) {
+            Optional<Obra> obra = obraService.getObraById(dto.getIdObra());
+            if (!obra.isPresent()) {
+                revista.setObra(null);
+            } else {
+                revista.setObra(obra.get());
+            }
+        }
 
         return revista;
     }
