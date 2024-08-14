@@ -4,6 +4,7 @@ package com.biblioteca.scbapi.api.controller;
 import com.biblioteca.scbapi.api.dto.ObraDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.model.entity.Obra;
+import com.biblioteca.scbapi.service.ExemplarService;
 import com.biblioteca.scbapi.service.ObraService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ObraController {
     private final ObraService service;
+    private final ExemplarService exemplarService;
 
     @GetMapping()
     public ResponseEntity get() {
@@ -53,6 +55,7 @@ public class ObraController {
             return new ResponseEntity("Obra não encontrado", HttpStatus.NOT_FOUND);
         }
         try {
+            exemplarService.excluirByObraId(obra);
             service.excluir(obra.get());
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (RegraNegocioException e) {

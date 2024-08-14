@@ -39,6 +39,15 @@ public class ObraService {
         repository.delete(obra);
     }
 
+    public void incrementExemplar(Obra obra){
+        obra.incrementExemplares();
+        salvar(obra);
+    }
+
+    public void decrementExemplar(Obra obra){
+        obra.decrementExemplares();
+        salvar(obra);
+    }
     public void validar(Obra obra) {
         if (obra.getCategoria() == null) {
             throw new RegraNegocioException("Categoria en branco");

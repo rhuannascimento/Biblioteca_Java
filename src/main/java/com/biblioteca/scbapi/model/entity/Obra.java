@@ -18,4 +18,8 @@ public class Obra {
     private float valorMultaPorDiaDeAtraso;
     private String categoria;
     private String editora;
+
+    public void incrementExemplares(){numExemplares++;}
+    public void decrementExemplares(){numExemplares--;}
+
 }

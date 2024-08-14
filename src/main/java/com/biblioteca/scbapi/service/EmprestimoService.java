@@ -7,6 +7,8 @@ import com.biblioteca.scbapi.model.repository.EmprestimoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +33,7 @@ public class EmprestimoService {
     public Emprestimo salvar(Emprestimo emprestimo) {
         validar(emprestimo);
         validarEmprestadoOuEmAtraso(emprestimo);
+        emprestimo = insertEmprestimoDates(emprestimo);
         return repository.save(emprestimo);
     }
 
@@ -40,12 +43,23 @@ public class EmprestimoService {
         repository.delete(emprestimo);
     }
 
+    public Emprestimo insertEmprestimoDates(Emprestimo emprestimo){
+
+        if(emprestimo.getDataDeEmprestimo() == null){
+            emprestimo.setDataDeEmprestimo(new Date());
+        }
+
+        if(emprestimo.getDataPrevistaDeDevolucao() == null){
+            emprestimo.setDataDeEmprestimo(new Date((new Date()).getTime() + (7L * 24 * 60 * 60 * 1000)));
+        }
+
+        return emprestimo;
+    }
+
+
     public void validar(Emprestimo emprestimo) {
         if (emprestimo.getExemplar() == null) {
             throw new RegraNegocioException("Nenhum exemplar selecionado");
-        }
-        if (emprestimo.getDataDeEmprestimo() == null) {
-            throw new RegraNegocioException("Data de demprestimo em branco");
         }
         if (emprestimo.getTomador() == null) {
             throw new RegraNegocioException("Tomador em branco");

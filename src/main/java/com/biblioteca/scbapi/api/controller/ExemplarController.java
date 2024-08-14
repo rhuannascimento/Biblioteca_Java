@@ -42,6 +42,7 @@ public class ExemplarController {
         try {
             Exemplar exemplar = converter(dto);
             exemplar = service.salvar(exemplar);
+            obraService.incrementExemplar(exemplar.getObra());
             return new ResponseEntity(exemplar, HttpStatus.CREATED);
         } catch (RegraNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -56,6 +57,7 @@ public class ExemplarController {
         }
         try {
             service.excluir(exemplar.get());
+            obraService.decrementExemplar(exemplar.get().getObra());
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (RegraNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
