@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 public class UsuarioDTO {
     private String login;
     private String cpf;
+    private String senhaRepeticao;
     private String senha;
     private boolean admin;
 

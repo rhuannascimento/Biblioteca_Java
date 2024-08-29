@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/funcionarios")
+@RequestMapping("/api/v1/funcionario")
 @RequiredArgsConstructor
 public class FuncionarioController {
     private final FuncionarioService service;
