@@ -6,6 +6,7 @@ import com.biblioteca.scbapi.api.dto.UsuarioDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.exception.SenhaInvalidaException;
 import com.biblioteca.scbapi.model.entity.Usuario;
+import com.biblioteca.scbapi.security.JwtService;
 import com.biblioteca.scbapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 public class UsuarioController {
     private final UsuarioService service;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @GetMapping()
     public ResponseEntity get() {
@@ -70,7 +72,8 @@ public class UsuarioController {
                     .login(credenciais.getLogin())
                     .senha(credenciais.getSenha()).build();
             UserDetails usuarioAutenticado = service.autenticar(usuario);
-            return new TokenDTO(usuario.getLogin());
+            String token = jwtService.gerarToken(usuario);
+            return new TokenDTO(usuario.getLogin(), token);
         } catch (UsernameNotFoundException | SenhaInvalidaException e ){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -105,8 +108,6 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
 
     public Usuario converter(UsuarioDTO dto) {
         ModelMapper modelMapper = new ModelMapper();

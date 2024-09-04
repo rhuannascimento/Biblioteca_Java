@@ -9,6 +9,11 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableSwagger2
@@ -23,8 +28,8 @@ public class SwaggerConfig {
                         .basePackage("com.biblioteca.scbapi.api.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                /*.securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))*/
+                .securityContexts(Arrays.asList(securityContext()))
+                .securitySchemes(Arrays.asList(apiKey()))
                 .apiInfo(apiInfo());
     }
 
@@ -44,7 +49,7 @@ public class SwaggerConfig {
     }
 
 
- /*   public ApiKey apiKey(){
+   public ApiKey apiKey(){
         return new ApiKey("JWT", "Authorization", "header");
     }
 
@@ -64,6 +69,6 @@ public class SwaggerConfig {
         List<SecurityReference> auths = new ArrayList<>();
         auths.add(reference);
         return auths;
-    }*/
+    }
 
 }
