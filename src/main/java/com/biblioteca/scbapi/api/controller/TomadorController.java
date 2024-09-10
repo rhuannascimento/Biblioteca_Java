@@ -1,10 +1,12 @@
 package com.biblioteca.scbapi.api.controller;
 
-
 import com.biblioteca.scbapi.api.dto.TomadorDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.model.entity.Tomador;
 import com.biblioteca.scbapi.service.TomadorService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -18,17 +20,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/tomador")
 @RequiredArgsConstructor
+@Api(value = "Tomador Controller", tags = {"Tomador"})
 public class TomadorController {
+
     private final TomadorService service;
 
     @GetMapping()
+    @ApiOperation(value = "Lista todos os tomadores", response = List.class)
     public ResponseEntity get() {
         List<Tomador> tomadores = service.getTomadores();
         return ResponseEntity.ok(tomadores.stream().map(TomadorDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Obtém um tomador pelo ID", response = TomadorDTO.class)
+    public ResponseEntity get(
+            @ApiParam(value = "ID do tomador", required = true) @PathVariable("id") Long id) {
         Optional<Tomador> tomador = service.getTomadorById(id);
         if (!tomador.isPresent()) {
             return new ResponseEntity("Tomador não encontrado", HttpStatus.NOT_FOUND);
@@ -37,7 +44,9 @@ public class TomadorController {
     }
 
     @PostMapping()
-    public ResponseEntity post(@RequestBody TomadorDTO dto) {
+    @ApiOperation(value = "Cria um novo tomador", response = TomadorDTO.class)
+    public ResponseEntity post(
+            @ApiParam(value = "Dados do tomador", required = true) @RequestBody TomadorDTO dto) {
         try {
             Tomador tomador = converter(dto);
             tomador = service.salvar(tomador);
@@ -48,7 +57,9 @@ public class TomadorController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Deleta um tomador pelo ID")
+    public ResponseEntity delete(
+            @ApiParam(value = "ID do tomador", required = true) @PathVariable("id") Long id) {
         Optional<Tomador> tomador = service.getTomadorById(id);
         if (!tomador.isPresent()) {
             return new ResponseEntity("Tomador não encontrado", HttpStatus.NOT_FOUND);
@@ -62,7 +73,10 @@ public class TomadorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody TomadorDTO dto) {
+    @ApiOperation(value = "Atualiza um tomador pelo ID", response = TomadorDTO.class)
+    public ResponseEntity atualizar(
+            @ApiParam(value = "ID do tomador", required = true) @PathVariable("id") Long id,
+            @ApiParam(value = "Dados atualizados do tomador", required = true) @RequestBody TomadorDTO dto) {
         if (!service.getTomadorById(id).isPresent()) {
             return new ResponseEntity("Tomador não encontrado", HttpStatus.NOT_FOUND);
         }

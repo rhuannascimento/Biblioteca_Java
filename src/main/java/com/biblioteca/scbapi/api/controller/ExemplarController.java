@@ -1,12 +1,14 @@
 package com.biblioteca.scbapi.api.controller;
 
 import com.biblioteca.scbapi.api.dto.ExemplarDTO;
-
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.model.entity.Exemplar;
 import com.biblioteca.scbapi.model.entity.Obra;
 import com.biblioteca.scbapi.service.ExemplarService;
 import com.biblioteca.scbapi.service.ObraService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -16,20 +18,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/exemplar")
 @RequiredArgsConstructor
+@Api(value = "Exemplar Controller", tags = {"Exemplar"})
 public class ExemplarController {
+
     private final ExemplarService service;
     private final ObraService obraService;
+
     @GetMapping()
+    @ApiOperation(value = "Lista todos os exemplares", response = List.class)
     public ResponseEntity get() {
         List<Exemplar> exemplares = service.getExemplares();
         return ResponseEntity.ok(exemplares.stream().map(ExemplarDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Obtém um exemplar pelo ID", response = ExemplarDTO.class)
+    public ResponseEntity get(
+            @ApiParam(value = "ID do exemplar", required = true) @PathVariable("id") Long id) {
         Optional<Exemplar> exemplar = service.getExemplarById(id);
         if (!exemplar.isPresent()) {
             return new ResponseEntity("Exemplar não encontrado", HttpStatus.NOT_FOUND);
@@ -38,7 +47,9 @@ public class ExemplarController {
     }
 
     @PostMapping()
-    public ResponseEntity post(@RequestBody ExemplarDTO dto) {
+    @ApiOperation(value = "Cria um novo exemplar", response = ExemplarDTO.class)
+    public ResponseEntity post(
+            @ApiParam(value = "Dados do exemplar", required = true) @RequestBody ExemplarDTO dto) {
         try {
             Exemplar exemplar = converter(dto);
             exemplar = service.salvar(exemplar);
@@ -50,7 +61,9 @@ public class ExemplarController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Deleta um exemplar pelo ID")
+    public ResponseEntity delete(
+            @ApiParam(value = "ID do exemplar", required = true) @PathVariable("id") Long id) {
         Optional<Exemplar> exemplar = service.getExemplarById(id);
         if (!exemplar.isPresent()) {
             return new ResponseEntity("Exemplar não encontrado", HttpStatus.NOT_FOUND);
@@ -65,7 +78,10 @@ public class ExemplarController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody ExemplarDTO dto) {
+    @ApiOperation(value = "Atualiza um exemplar pelo ID", response = ExemplarDTO.class)
+    public ResponseEntity atualizar(
+            @ApiParam(value = "ID do exemplar", required = true) @PathVariable("id") Long id,
+            @ApiParam(value = "Dados atualizados do exemplar", required = true) @RequestBody ExemplarDTO dto) {
         if (!service.getExemplarById(id).isPresent()) {
             return new ResponseEntity("Exemplar não encontrado", HttpStatus.NOT_FOUND);
         }
@@ -94,6 +110,4 @@ public class ExemplarController {
 
         return exemplar;
     }
-
-
 }

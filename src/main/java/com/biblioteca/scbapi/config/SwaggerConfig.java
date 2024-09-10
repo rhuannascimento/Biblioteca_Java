@@ -36,15 +36,15 @@ public class SwaggerConfig {
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
                 .title("SAA API")
-                .description("API do Sistema de Apoio Acadêmico")
+                .description("API Biblioteca Java")
                 .version("1.0")
                 .contact(contact())
                 .build();
     }
 
     private Contact contact(){
-        return new Contact("Julia e Marina Condé Araújo"
-                , "http://github.com/",
+        return new Contact("Rhuan e igor"
+                , "https://www.istockphoto.com/br/fotos/capivara",
                 "Rhuan e Iguinho");
     }
 

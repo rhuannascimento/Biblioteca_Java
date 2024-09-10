@@ -4,6 +4,9 @@ import com.biblioteca.scbapi.api.dto.FuncionarioDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.model.entity.Funcionario;
 import com.biblioteca.scbapi.service.FuncionarioService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -17,17 +20,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/funcionario")
 @RequiredArgsConstructor
+@Api(value = "Funcionario Controller", tags = {"Funcionario"})
 public class FuncionarioController {
+
     private final FuncionarioService service;
 
     @GetMapping()
+    @ApiOperation(value = "Lista todos os funcionários", response = List.class)
     public ResponseEntity get() {
         List<Funcionario> funcionarios = service.getFuncionarios();
         return ResponseEntity.ok(funcionarios.stream().map(FuncionarioDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Obtém um funcionário pelo ID", response = FuncionarioDTO.class)
+    public ResponseEntity get(
+            @ApiParam(value = "ID do funcionário", required = true) @PathVariable("id") Long id) {
         Optional<Funcionario> funcionario = service.getFuncionarioById(id);
         if (!funcionario.isPresent()) {
             return new ResponseEntity("Funcionário não encontrado", HttpStatus.NOT_FOUND);
@@ -36,7 +44,9 @@ public class FuncionarioController {
     }
 
     @PostMapping()
-    public ResponseEntity post(@RequestBody FuncionarioDTO dto) {
+    @ApiOperation(value = "Cria um novo funcionário", response = FuncionarioDTO.class)
+    public ResponseEntity post(
+            @ApiParam(value = "Dados do funcionário", required = true) @RequestBody FuncionarioDTO dto) {
         try {
             Funcionario funcionario = converter(dto);
             funcionario = service.salvar(funcionario);
@@ -47,10 +57,12 @@ public class FuncionarioController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Deleta um funcionário pelo ID")
+    public ResponseEntity delete(
+            @ApiParam(value = "ID do funcionário", required = true) @PathVariable("id") Long id) {
         Optional<Funcionario> funcionario = service.getFuncionarioById(id);
         if (!funcionario.isPresent()) {
-            return new ResponseEntity("Funcionario não encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Funcionário não encontrado", HttpStatus.NOT_FOUND);
         }
         try {
             service.excluir(funcionario.get());
@@ -61,9 +73,12 @@ public class FuncionarioController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody FuncionarioDTO dto) {
+    @ApiOperation(value = "Atualiza um funcionário pelo ID", response = FuncionarioDTO.class)
+    public ResponseEntity atualizar(
+            @ApiParam(value = "ID do funcionário", required = true) @PathVariable("id") Long id,
+            @ApiParam(value = "Dados atualizados do funcionário", required = true) @RequestBody FuncionarioDTO dto) {
         if (!service.getFuncionarioById(id).isPresent()) {
-            return new ResponseEntity("Funcionario não encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Funcionário não encontrado", HttpStatus.NOT_FOUND);
         }
         try {
             Funcionario funcionario = converter(dto);
@@ -77,9 +92,6 @@ public class FuncionarioController {
 
     public Funcionario converter(FuncionarioDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
-        Funcionario funcionario = modelMapper.map(dto, Funcionario.class);
-
-        return funcionario;
+        return modelMapper.map(dto, Funcionario.class);
     }
-
 }

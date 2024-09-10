@@ -1,6 +1,5 @@
 package com.biblioteca.scbapi.api.controller;
 
-
 import com.biblioteca.scbapi.api.dto.EmprestimoDTO;
 import com.biblioteca.scbapi.exception.RegraNegocioException;
 import com.biblioteca.scbapi.model.entity.Emprestimo;
@@ -9,6 +8,9 @@ import com.biblioteca.scbapi.model.entity.Tomador;
 import com.biblioteca.scbapi.service.EmprestimoService;
 import com.biblioteca.scbapi.service.ExemplarService;
 import com.biblioteca.scbapi.service.TomadorService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -18,22 +20,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-//opa 2
+
 @RestController
 @RequestMapping("/api/v1/emprestimo")
 @RequiredArgsConstructor
+@Api(value = "Emprestimo Controller", tags = {"Emprestimo"})
 public class EmprestimoController {
+
     private final EmprestimoService service;
     private final TomadorService tomadorService;
     private final ExemplarService exemplarService;
+
     @GetMapping()
+    @ApiOperation(value = "Lista todos os empréstimos", response = List.class)
     public ResponseEntity get() {
         List<Emprestimo> emprestimos = service.getEmprestimos();
         return ResponseEntity.ok(emprestimos.stream().map(EmprestimoDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Obtém um empréstimo pelo ID", response = EmprestimoDTO.class)
+    public ResponseEntity get(
+            @ApiParam(value = "ID do empréstimo", required = true) @PathVariable("id") Long id) {
         Optional<Emprestimo> emprestimo = service.getEmprestimoById(id);
         if (!emprestimo.isPresent()) {
             return new ResponseEntity("Emprestimo não encontrado", HttpStatus.NOT_FOUND);
@@ -42,7 +50,9 @@ public class EmprestimoController {
     }
 
     @PostMapping()
-    public ResponseEntity post(@RequestBody EmprestimoDTO dto) {
+    @ApiOperation(value = "Cria um novo empréstimo", response = EmprestimoDTO.class)
+    public ResponseEntity post(
+            @ApiParam(value = "Dados do empréstimo", required = true) @RequestBody EmprestimoDTO dto) {
         try {
             Emprestimo emprestimo = converter(dto);
             emprestimo = service.salvar(emprestimo);
@@ -53,7 +63,9 @@ public class EmprestimoController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Deleta um empréstimo pelo ID")
+    public ResponseEntity delete(
+            @ApiParam(value = "ID do empréstimo", required = true) @PathVariable("id") Long id) {
         Optional<Emprestimo> emprestimo = service.getEmprestimoById(id);
         if (!emprestimo.isPresent()) {
             return new ResponseEntity("Emprestimo não encontrado", HttpStatus.NOT_FOUND);
@@ -67,7 +79,10 @@ public class EmprestimoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody EmprestimoDTO dto) {
+    @ApiOperation(value = "Atualiza um empréstimo pelo ID", response = EmprestimoDTO.class)
+    public ResponseEntity atualizar(
+            @ApiParam(value = "ID do empréstimo", required = true) @PathVariable("id") Long id,
+            @ApiParam(value = "Dados atualizados do empréstimo", required = true) @RequestBody EmprestimoDTO dto) {
         if (!service.getEmprestimoById(id).isPresent()) {
             return new ResponseEntity("Emprestimo não encontrado", HttpStatus.NOT_FOUND);
         }
@@ -105,6 +120,4 @@ public class EmprestimoController {
 
         return emprestimo;
     }
-
-
 }
