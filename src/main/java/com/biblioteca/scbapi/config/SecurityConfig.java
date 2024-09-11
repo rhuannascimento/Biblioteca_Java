@@ -5,6 +5,7 @@ import com.biblioteca.scbapi.security.JwtService;
 import com.biblioteca.scbapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -59,23 +60,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole("ADMIN")
 
                 //Livro
-                .antMatchers("/api/v1/livro/get")
+                .antMatchers(HttpMethod.GET,"/api/v1/livro")
                 .permitAll()
-                .antMatchers("/api/v1/livro/post")
+                .antMatchers(HttpMethod.POST,"/api/v1/livro")
                 .hasAnyRole("ADMIN")
-                .antMatchers("/api/v1/livro/delete")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/livro")
                 .hasAnyRole("ADMIN")
-                .antMatchers("/api/v1/livro/atualizar")
+                .antMatchers(HttpMethod.PUT,"/api/v1/livro")
                 .hasAnyRole("ADMIN")
 
                 //Obra
-                .antMatchers("/api/v1/obra/get")
+                .antMatchers(HttpMethod.GET,"/api/v1/obra/get")
                 .permitAll()
-                .antMatchers("/api/v1/obra/post")
+                .antMatchers(HttpMethod.POST,"/api/v1/obra")
                 .hasAnyRole("ADMIN")
-                .antMatchers("/api/v1/obra/delete")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/obra")
                 .hasAnyRole("ADMIN")
-                .antMatchers("/api/v1/obra/atualizar")
+                .antMatchers(HttpMethod.PUT, "/api/v1/obra")
                 .hasAnyRole("ADMIN")
 
                 //Reserva
@@ -83,14 +84,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole("ADMIN", "USER")
 
                 //Revista
-                .antMatchers("/api/v1/revista/get")
+                .antMatchers(HttpMethod.GET,"/api/v1/revista")
                 .permitAll()
-                .antMatchers("/api/v1/revista/post")
+                .antMatchers(HttpMethod.POST,"/api/v1/revista")
                 .hasAnyRole("ADMIN")
-                .antMatchers("/api/v1/revista/delete")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/revista")
                 .hasAnyRole("ADMIN")
-                .antMatchers("/api/v1/revista/atualizar")
+                .antMatchers(HttpMethod.PUT,"/api/v1/revista")
                 .hasAnyRole("ADMIN")
+
+                //Tomador
                 .antMatchers("/api/v1/tomador/**")
                 .hasAnyRole("ADMIN")
 

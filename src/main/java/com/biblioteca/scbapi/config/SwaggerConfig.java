@@ -44,7 +44,7 @@ public class SwaggerConfig {
 
     private Contact contact(){
         return new Contact("Rhuan e igor"
-                , "https://www.istockphoto.com/br/fotos/capivara",
+                , "https://raw.githubusercontent.com/rhuannascimento/Biblioteca_Java/main/dev.jpeg",
                 "Rhuan e Iguinho");
     }
 
